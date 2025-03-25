@@ -1,0 +1,11 @@
+{
+  "name": "mozbo",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "dev": "http-server"
+  },
+  "author": "d1_boy4h",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,0 +1,49 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --cell-size: 20px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+}
+
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: center;
+  display: inline-block;
+  margin: 0 auto 10px;
+  border-bottom: 5px black solid;
+}
+
+.end-title {
+  position: absolute;
+  font-size: 3em;
+  font-weight: bold;
+  font-family: sans-serif;
+  opacity: .7;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+
+  /* border: 1px rgba(0, 0, 0, .1) solid; */
+}
+
+.line {
+  display: flex;
+}
