@@ -24,6 +24,7 @@ export class Game {
     this.speed = speed;
 
     this.isRun = true;
+    this.isPause = false;
 
     this.map = this.createMap(this.width, this.height);
 
@@ -84,7 +85,7 @@ export class Game {
     cell.style.backgroundColor = Game.cellColors[this.map[y - 1][x - 1]];
   }
 
-  setCell(xValue, yValue, symbol = Game.void) {
+  setCell(xValue, yValue, symbol) {
     const x = xValue.toFixed();
     const y = yValue.toFixed();
 
@@ -92,7 +93,7 @@ export class Game {
     this.updateCell(x, y);
   }
 
-  render(cordList, symbol) {
+  render(cordList, symbol = Game.void) {
     cordList.forEach(cords => {
       this.setCell(cords[0], cords[1], symbol);
     });
@@ -103,13 +104,17 @@ export class Game {
     const nextMapCords = this.map[nextCords[1] - 1][nextCords[0] - 1];
 
     if (nextMapCords === Game.void || nextMapCords === Game.fruit) {
-      this.render(this.snake.body);
+      // this.render(this.snake.body);
 
       if (nextMapCords === Game.fruit) {
-        this.snake.stepOnFruit();
         this.handleSpawnFruit();
+        this.render(this.snake.body);
+        this.snake.stepOnFruit();
       }
-      else this.snake.step();
+      else {
+        this.render(this.snake.body);
+        this.snake.step();
+      }
 
       this.render(this.snake.body, Game.body);
       this.render([this.snake.body[0]], Game.head);
@@ -119,6 +124,7 @@ export class Game {
 
   handleKeyPress = event => {
     switch(event.key) {
+      case 'ArrowUp':
       case 'w':
       case 'W':
       case 'ц':
@@ -126,6 +132,7 @@ export class Game {
         if (this.snake.vector !== Snake.vectors.down)
           this.snake.vector = Snake.vectors.up;
         break;
+      case 'ArrowRight':
       case 'd':
       case 'D':
       case 'в':
@@ -133,6 +140,7 @@ export class Game {
         if (this.snake.vector !== Snake.vectors.left)
           this.snake.vector = Snake.vectors.right;
         break;
+      case 'ArrowDown':
       case 's':
       case 'S':
       case 'ы':
@@ -140,6 +148,7 @@ export class Game {
         if (this.snake.vector !== Snake.vectors.up)
           this.snake.vector = Snake.vectors.down;
         break;
+      case 'ArrowLeft':
       case 'a':
       case 'A':
       case 'ф':
@@ -147,17 +156,39 @@ export class Game {
         if (this.snake.vector !== Snake.vectors.right)
           this.snake.vector = Snake.vectors.left;
         break;
+      case 'r':
+      case 'R':
+      case 'к':
+      case 'К':
+        // Функция паузы
+        break;
+      case 'Escape':
+        this.switchPause();
     }
   }
 
   handleSpawnFruit() {
-    for (let k = 0; k < this.width * this.height; k++) {
+    for (let k = 0; k < (this.width * this.height) - this.snake.size; k++) {
       this.fruit.spawn();
       if (this.map[this.fruit.cords[1] - 1][this.fruit.cords[0] - 1] === Game.void)
         break;
     }
 
     this.render([this.fruit.cords], Game.fruit);
+    this.speed = this.speed - 2;
+  }
+
+  switchPause() {
+    this.isPause = !this.isPause;
+    if (this.isPause) {
+      const pauseTitle = document.createElement('span');
+      pauseTitle.innerText = 'Пауза';
+      pauseTitle.className = 'pause-title';
+      document.body.appendChild(pauseTitle);
+    }
+    else {
+      document.querySelector('.pause-title').remove();
+    }
   }
 
   start() {
@@ -173,12 +204,12 @@ export class Game {
     const handleStep = this.handleStep;
     const currentThis = this;
 
-    const speed = this.speed;
     let timer = setTimeout(function func() {
-      handleStep.call(currentThis);
+      if (!currentThis.isPause) handleStep.call(currentThis);
+
       if (!currentThis.isRun) return;
-      timer = setTimeout(func, speed);
-    }, speed);
+      timer = setTimeout(func, currentThis.speed);
+    }, this.speed);
   }
 
   stop() {
@@ -188,5 +219,7 @@ export class Game {
     endTitle.innerText = 'Конец игры';
     endTitle.className = 'end-title';
     document.body.appendChild(endTitle);
+
+    document.removeEventListener('keydown', this.handleKeyPress);
   }
 }

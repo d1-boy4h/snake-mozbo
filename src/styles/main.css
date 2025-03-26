@@ -29,7 +29,7 @@ body {
   border-bottom: 5px black solid;
 }
 
-.end-title {
+.end-title, .pause-title {
   position: absolute;
   font-size: 3em;
   font-weight: bold;
@@ -41,7 +41,7 @@ body {
   width: var(--cell-size);
   height: var(--cell-size);
 
-  /* border: 1px rgba(0, 0, 0, .1) solid; */
+  border: 1px rgba(0, 0, 0, .05) solid;
 }
 
 .line {

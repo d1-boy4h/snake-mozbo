@@ -30,5 +30,6 @@ export class Snake {
 
   stepOnFruit() {
     this.body.unshift(this.vector(this.body[0]));
+    this.size++;
   }
 }
