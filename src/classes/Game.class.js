@@ -102,10 +102,13 @@ export class Game {
   handleStep() {
     const nextCords = this.snake.vector(this.snake.body[0]);
     const nextMapCords = this.map[nextCords[1] - 1][nextCords[0] - 1];
+    console.log(nextCords);
 
-    if (nextMapCords === Game.void || nextMapCords === Game.fruit) {
-      // this.render(this.snake.body);
-
+    if (
+      nextMapCords === Game.void ||
+      nextMapCords === Game.fruit ||
+      nextCords.every((value, i) => value === this.snake.body.at(-1)[i])
+    ) {
       if (nextMapCords === Game.fruit) {
         this.handleSpawnFruit();
         this.render(this.snake.body);
@@ -160,7 +163,7 @@ export class Game {
       case 'R':
       case 'к':
       case 'К':
-        // Функция паузы
+        // Функция перезапуска игры
         break;
       case 'Escape':
         this.switchPause();
