@@ -17,14 +17,18 @@ export class Game {
   };
 
   constructor(props) {
-    const { width, height, speed, snakeSize } = props;
+    const { width, height, speed, acceleration, snakeSize } = props;
 
     this.width = width;
     this.height = height;
     this.speed = speed;
+    this.acceleration = acceleration;
 
+    this.score = 0;
     this.isRun = true;
     this.isPause = false;
+
+    this.scoreObject = document.querySelector('#score');
 
     this.map = this.createMap(this.width, this.height);
 
@@ -102,15 +106,19 @@ export class Game {
   handleStep() {
     const nextCords = this.snake.vector(this.snake.body[0]);
     const nextMapCords = this.map[nextCords[1] - 1][nextCords[0] - 1];
-    console.log(nextCords);
 
     if (
       nextMapCords === Game.void ||
       nextMapCords === Game.fruit ||
+      // Тут возможно нужна будет оптимизация
       nextCords.every((value, i) => value === this.snake.body.at(-1)[i])
     ) {
       if (nextMapCords === Game.fruit) {
         this.handleSpawnFruit();
+
+        this.score++;
+        this.updateScore();
+
         this.render(this.snake.body);
         this.snake.stepOnFruit();
       }
@@ -178,7 +186,7 @@ export class Game {
     }
 
     this.render([this.fruit.cords], Game.fruit);
-    this.speed = this.speed - 2;
+    if (this.acceleration && this.speed > 0) this.speed = this.speed - 2;
   }
 
   switchPause() {
@@ -194,11 +202,18 @@ export class Game {
     }
   }
 
+  updateScore() {
+    if (this.scoreObject) {
+      this.scoreObject.innerText = this.score;
+    }
+  }
+
   start() {
     // Создание поля, спавн змеи и фрукта
     this.buildMap(this.map);
     this.snake.spawn();
     this.handleSpawnFruit();
+    this.updateScore();
 
     // Отслеживание нажатия клавиш
     document.addEventListener('keydown', this.handleKeyPress);
@@ -220,7 +235,6 @@ export class Game {
 
     const endTitle = document.createElement('span');
     endTitle.innerText = 'Конец игры';
-    endTitle.className = 'end-title';
     document.body.appendChild(endTitle);
 
     document.removeEventListener('keydown', this.handleKeyPress);

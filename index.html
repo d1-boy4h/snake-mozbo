@@ -8,9 +8,16 @@
     <link rel="stylesheet" href="src/styles/main.css">
   </head>
   <body>
-    <span class="title">Змейка Mozbo</span>
+    <span class="title">Змейка Mozbo</span><br>
 
-    <div id="app"></div>
+    <div class="app-wrapper">
+      <div class="score">Счёт: <span id="score"></span></div>
+      <div id="app"></div>
+      <div class="version">
+        <p>Версия: 1.0.2 [<a href="changelog.html" target="_blank">changelog</a>]</p>
+      </div>
+    </div>
+
     <script type="module" src="src/main.js"></script>
   </body>
 </html>

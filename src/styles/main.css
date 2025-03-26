@@ -34,6 +34,7 @@ body {
   font-size: 3em;
   font-weight: bold;
   font-family: sans-serif;
+  text-align: center;
   opacity: .7;
 }
 
@@ -46,4 +47,16 @@ body {
 
 .line {
   display: flex;
+}
+
+.version {
+  display: flex;
+  justify-content: right;
+}
+
+.score {
+  font-size: 1.2em;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: right;
 }
