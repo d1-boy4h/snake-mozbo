@@ -235,6 +235,7 @@ export class Game {
 
     const endTitle = document.createElement('span');
     endTitle.innerText = 'Конец игры';
+    endTitle.className = 'end-title';
     document.body.appendChild(endTitle);
 
     document.removeEventListener('keydown', this.handleKeyPress);
